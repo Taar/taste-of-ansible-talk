@@ -1,0 +1,16 @@
+{
+  "name": "simple-app",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "mdx-deck --host=\"0.0.0.0\" --no-open deck.mdx"
+  },
+  "devDependencies": {
+    "mdx-deck": "^1.7.7"
+  },
+  "dependencies": {
+    "koa": "^2.5.3",
+    "pg": "^7.5.0"
+  }
+}

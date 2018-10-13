@@ -1,0 +1,9 @@
+---
+- hosts: control
+  become: True
+  gather_facts: false
+  roles:
+    - {
+      name: apt-packages,
+      packages: ['curl'],
+    }

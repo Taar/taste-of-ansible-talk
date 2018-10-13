@@ -1,0 +1,6 @@
+---
+# handler to restart the nginx process when config changes are made
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted

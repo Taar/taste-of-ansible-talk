@@ -1,0 +1,8 @@
+---
+- name: install apt packages
+  apt:
+    name: "{{ packages }}"
+    state: present
+  tags: [
+    'packages'
+  ]

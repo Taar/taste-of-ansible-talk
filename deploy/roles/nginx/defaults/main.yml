@@ -1,0 +1,5 @@
+---
+sites:
+  myapp:
+    port: 80
+    root: /www/myapp

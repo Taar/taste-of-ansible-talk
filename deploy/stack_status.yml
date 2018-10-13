@@ -1,0 +1,9 @@
+---
+- hosts: control
+  gather_facts: false
+  tasks:
+    - name: verify slides are working
+      uri:
+        url: http://{{ item }}
+        return_content: true
+      with_items: "{{ groups['slides'] }}"
