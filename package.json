@@ -4,13 +4,14 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "mdx-deck --host=\"0.0.0.0\" --no-open deck.mdx"
+    "start": "mdx-deck --host=\"0.0.0.0\" --no-open deck.mdx",
+    "build": "NODE_ENV=production mdx-deck build --no-html deck.mdx"
   },
   "devDependencies": {
     "mdx-deck": "^1.7.7"
   },
   "dependencies": {
-    "koa": "^2.5.3",
-    "pg": "^7.5.0"
+    "mdx-deck-code-surfer": "^0.5.3",
+    "raw-loader": "^0.5.1"
   }
 }

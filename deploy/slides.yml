@@ -2,15 +2,29 @@
 - hosts: slides
   become: True
   gather_facts: false
-  tasks:
+  pre_tasks:
+    - name: build files exist
+      file:
+        path: '../dist/{{item}}'
+        state: file
+      with_items: [
+        'index.html',
+        'main.js'
+      ]
+      tags: ['check']
+
     - name: create project dir
       file:
         path: /www/slides/
         state: directory
+      tags: ['build']
+
     - name: copy build files
       copy:
         src: ../dist/
         dest: /www/slides/
+      tags: ['build']
+
   roles:
     - {
       name: nginx,

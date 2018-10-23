@@ -1,0 +1,26 @@
+---
+- name: 'add sources pubkey'
+  apt_key:
+    url: "{{ item.value.key_url }}"
+    state: present
+  with_dict: '{{ sources }}'
+  tags: ['packages']
+
+- name: 'add source files'
+  file:
+    path: /etc/apt/sources.list.d/{{item.key}}.list
+    state: touch
+  with_dict: '{{ sources }}'
+  changed_when: false
+  tags: ['packages']
+
+- name: 'add source list'
+  lineinfile:
+    path: /etc/apt/sources.list.d/{{item.key}}.list
+    line: '{{item.value.source}}'
+    insertafter: EOF
+  with_dict: '{{ sources }}'
+  notify: update sources
+  tags: ['packages']
+
+- meta: flush_handlers

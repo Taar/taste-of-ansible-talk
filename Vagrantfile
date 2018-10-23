@@ -10,7 +10,7 @@
 # 3. vagrant ssh
 
 Vagrant.configure(2) do |config|
-  config.hostmanager.enable = true
+  config.hostmanager.enabled = true
   config.hostmanager.manage_host = true
   config.hostmanager.manage_guest = true
 
@@ -27,7 +27,8 @@ Vagrant.configure(2) do |config|
     end
     h.vm.hostname = "control"
     h.vm.network "private_network", ip: "192.168.135.10"
-    h.vm.synced_folder "./", "/home/vagrant/working_dir", create: true
+    h.vm.network :forwarded_port, guest: 8080, host: 56789
+    h.vm.synced_folder "./", "/home/vagrant/talk-files", create: true
     h.vm.provision :shell, :inline => <<'EOF'
 cp /vagrant/ansible.pub /home/vagrant/.ssh/id_rsa.pub
 cp /vagrant/ansible /home/vagrant/.ssh/id_rsa
@@ -36,21 +37,16 @@ chown -R vagrant:vagrant /home/vagrant/.ssh/
 EOF
   end
 
-  config.vm.define "slideserver01" do |h|
-    h.vm.hostname = "slideserver01"
+  config.vm.define "slides01" do |h|
+    h.vm.hostname = "slides01"
     h.vm.network "private_network", ip: "192.168.135.11"
     h.vm.provision :shell, inline: 'cat /vagrant/ansible.pub >> /home/vagrant/.ssh/authorized_keys'
   end
 
-  config.vm.define "webserver01" do |h|
-    h.vm.hostname = "webserver01"
+  config.vm.define "slides02" do |h|
+    h.vm.hostname = "slides02"
     h.vm.network "private_network", ip: "192.168.135.12"
     h.vm.provision :shell, inline: 'cat /vagrant/ansible.pub >> /home/vagrant/.ssh/authorized_keys'
   end
 
-  config.vm.define "database01" do |h|
-    h.vm.hostname = "database01"
-    h.vm.network "private_network", ip: "192.168.135.13"
-    h.vm.provision :shell, inline: 'cat /vagrant/ansible.pub >> /home/vagrant/.ssh/authorized_keys'
-  end
 end

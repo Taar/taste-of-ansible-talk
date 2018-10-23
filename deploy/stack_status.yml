@@ -7,3 +7,10 @@
         url: http://{{ item }}
         return_content: true
       with_items: "{{ groups['slides'] }}"
+      register: slide_index
+
+    - fail:
+        msg: 'sldies failed to return content'
+      when: "'mdx-deck' not in item.content"
+      with_items: "{{ slide_index.results }}"
+

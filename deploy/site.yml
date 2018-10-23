@@ -11,3 +11,4 @@
 
 - import_playbook: control.yml
 - import_playbook: slides.yml
+- import_playbook: stack_status.yml

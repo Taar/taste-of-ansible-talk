@@ -1,9 +1,34 @@
 ---
-- hosts: control
+- hosts: controller
   become: True
   gather_facts: false
+
   roles:
     - {
-      name: apt-packages,
-      packages: ['curl'],
+      name: sources,
+      sources: {
+        yarn: {
+          key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg',
+          source: 'deb https://dl.yarnpkg.com/debian/ stable main'
+        }
+      }
     }
+    - {
+      name: apt-packages,
+      packages: [
+        'curl',
+        'nodejs',
+        'yarn',
+      ],
+    }
+
+  tasks:
+    - name: install node packages
+      yarn:
+        path: ../
+        state: present
+      tags: ['packages']
+
+    - name: build slides
+      command: yarn build
+      tags: ['build']

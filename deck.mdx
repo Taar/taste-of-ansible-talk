@@ -1,5 +1,117 @@
+export { notes as theme } from 'mdx-deck/themes';
+import { CodeSurfer } from 'mdx-deck-code-surfer';
+import { Notes } from 'mdx-deck';
+
 # Deploying with Ansible
 ---
 # About me
+
+@randytopliffe
 ---
-# Show me code!
+# What is ansible
+
+"Simple, agentless IT automation that anyone can use"
+```notes
+"Anyone can use", It's true, ansible makes it very easy to automate deploying an application (which is what us developers mostly care about)
+```
+---
+# Disclosure!
+
+```notes
+Tools like ansible are great but, remember they are tools to automate provisioning of a server. Which means you need to already know linux adminstration and networking. Now you don't need to be an expert, as I am not, but you definitely need some experience in those domains.
+```
+---
+# This talk!
+
+github.com/Taar/taste-of-ansible-talk
+```notes
+Warning! I only have intructions for Unix systems.
+
+Inclues slides and all examples used in the slides. Also everything you need to try running the example yourself.
+```
+---
+# The goal
+- Build slides on a control server (not host machine)
+- Deploy these slides
+```notes
+The overall goal was to deploy these slides on two servers and to build the slides on a control server.
+```
+---
+# `inventory`
+
+Hosts and Groups
+
+```notes
+The inventory is a collection of hosts, ip addresses, of the systems you'd like ansible to run against, provision. You can have dymanic inventories, however we're not going to talk about those here. But it's how you can get ansible to connect to AWS for example.
+```
+---
+<CodeSurfer
+  code={require('raw-loader!./deploy/inventory')}
+  title="inventory file"
+  showNumbers
+  steps={[
+    { range: [1, 2], notes: 'Control Group' },
+    { range: [4, 6], notes: 'Server Groups' },
+    { lines: [1, 4], notes: 'group names' },
+    { lines: [2, 5, 6], notes: 'hosts' },
+    { range: [8, 10], notes: 'Ubuntu Group' },
+    { range: [8, 13], notes: 'Ubuntu Group' },
+  ]}
+/>
+<Notes>
+We'll talk about what the controller is later and why I recommend using one
+
+First part of this file is assigning host names of servers to a group name. At the end we then assign each of those groups to another group called ubuntu. At the bottom I'm telling ansible to use the python3 interpreter for the ubuntu group as the version of ubuntu I'm using doesn't come with python2.
+</Notes>
+---
+<CodeSurfer
+  code={require('raw-loader!./deploy/slides.yml')}
+  title="Ansible Playbook"
+  showNumbers
+  notes="slides.yml"
+  steps={[
+    { lines: [2], notes: 'Hosts' },
+    { lines: [3, 4], notes: 'Super User and Fact gathering' },
+    { range: [5, 26], notes: 'Tasks' },
+    { lines: [5], notes: 'pre_tasks' },
+    { lines: [6], notes: 'Task Name' },
+    { range: [7, 9], notes: 'File Module' },
+    { ranges: [[10, 13], [8, 8]], notes: 'with_items' },
+    { range: [28, 37], notes: 'Roles' },
+  ]}
+/>
+<Notes>
+Ansible playbooks are where you define what tasks you would like to perform on a host.
+</Notes>
+---
+`$ ansible-playbook slides.yml`
+---
+# Control Server
+
+```notes
+Ansible needs to run off a host machine. I prefer to use another machine other than my laptop to install and run ansible off of. Manual work is involved, as I'll need to make sure my playbooks and roles are on that machine and that it has ansible installed.
+
+The reason I prefer this is because everyone that runs my playbooks will be using the same system. It removes the possiblity of host system differences that could impact how the playbooks run and the tools available to debug.
+```
+---
+<CodeSurfer
+  code={require('raw-loader!./deploy/inventory')}
+  title="inventory file"
+  showNumbers
+  steps={[
+    { lines: [2], notes: 'local' },
+  ]}
+/>
+<Notes>
+Since ansible can run tasks on any host you provide it in the inventory file, this means it can also run tasks on the host machine, or in our case the control server.
+</Notes>
+---
+<CodeSurfer
+  code={require('raw-loader!./deploy/control.yml')}
+  title="Ansible Playbook"
+  showNumbers
+  notes="control.yml"
+/>
+<Notes>
+Now I can make sure the control machine has all the tools I need to debug issues or to make sure everything is running correctly.
+</Notes>
