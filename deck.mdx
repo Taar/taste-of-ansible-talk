@@ -50,12 +50,11 @@ The inventory is a collection of hosts, ip addresses, of the systems you'd like 
   title="inventory file"
   showNumbers
   steps={[
-    { range: [1, 2], notes: 'Control Group' },
+    { range: [1, 2], notes: 'Control (localhost) Group' },
     { range: [4, 6], notes: 'Server Groups' },
     { lines: [1, 4], notes: 'group names' },
     { lines: [2, 5, 6], notes: 'hosts' },
-    { range: [8, 10], notes: 'Ubuntu Group' },
-    { range: [8, 13], notes: 'Ubuntu Group' },
+    { range: [8, 9], notes: 'Vars' },
   ]}
 />
 <Notes>
@@ -72,12 +71,13 @@ First part of this file is assigning host names of servers to a group name. At t
   steps={[
     { lines: [2], notes: 'Hosts' },
     { lines: [3, 4], notes: 'Super User and Fact gathering' },
-    { range: [5, 26], notes: 'Tasks' },
+    { range: [5, 16], notes: 'Tasks' },
     { lines: [5], notes: 'pre_tasks' },
     { lines: [6], notes: 'Task Name' },
     { range: [7, 9], notes: 'File Module' },
-    { ranges: [[10, 13], [8, 8]], notes: 'with_items' },
-    { range: [28, 37], notes: 'Roles' },
+    { lines: [10], notes: 'Tags' },
+    { range: [18, 27], notes: 'Roles' },
+    { range: [21, 26], notes: 'Vars' },
   ]}
 />
 <Notes>
@@ -113,16 +113,69 @@ Since ansible can run tasks on any host you provide it in the inventory file, th
   notes="control.yml"
   steps={[
     { range: [25, 60], notes: 'Build Slides' },
-    { range: [26, 29], notes: 'Create dist folder' },
-    { range: [31, 33], notes: 'Check for pervious build' },
-    { range: [35, 40], notes: 'Remove previous build files' },
-    { range: [42, 46], notes: 'Install node packages' },
-    { range: [48, 50], notes: 'Build Slides' },
-    { range: [52, 60], notes: 'Sanity Check' },
+    { range: [26, 30], notes: 'Create dist folder' },
+    { range: [32, 35], notes: 'Check for pervious build' },
+    { range: [37, 42], notes: 'Remove previous build files' },
+    { lines: [39, 41], notes: 'with_items' },
+    { lines: [39, 41, 34], notes: 'with_items' },
+    { lines: [42], notes: 'when' },
+    { range: [45, 49], notes: 'Install node packages' },
+    { range: [51, 53], notes: 'Build Slides' },
+    { range: [55, 63], notes: 'Sanity Check' },
+    { ranges: [[57, 57], [59, 62]], notes: 'Sanity Check' },
   ]}
 />
 <Notes>
 On the control machine I build the slides so I can later copy them to the slides servers
 </Notes>
+---
+`$ ansible-playbook control.yml`
+---
+# How do we know it all worked?
+```notes
+We don't. So we'll need to create a playbook to check to see if everything is working correctly
+```
+---
+<CodeSurfer
+  code={require('raw-loader!./deploy/stack_status.yml')}
+  title="Stack Status Playbook"
+  showNumbers
+  notes="stack_status.yml"
+  steps={[
+    { lines: [2], notes: 'On controller' },
+    { range: [5, 10], notes: 'Curl slides' },
+    { lines: [7, 8], notes: 'Endpoint returns content' },
+    { lines: [9, 7], notes: 'Test each Host in the slides group' },
+    { lines: [10], notes: 'register' },
+    { range: [12, 15], notes: 'Test content' },
+    { lines: [14, 15], notes: 'Cannot find title in the content' },
+  ]}
+/>
+<Notes>
+stack_status.yml lets us test to see if our playbooks run correctly
+</Notes>
+---
+`$ ansible-playbook stack_status.yml`
+---
+# Throw it all together
+---
+<CodeSurfer
+  code={require('raw-loader!./deploy/site.yml')}
+  title="Site Playbook"
+  showNumbers
+  notes="site.yml"
+  steps={[
+    { range: [1, 14], notes: 'site.yml' },
+    { range: [5, 10], notes: 'Update Apt Cache' },
+    { range: [12, 14], notes: 'import playbooks' },
+  ]}
+/>
+<Notes>
+site.yml will allow us to run everything at once
+</Notes>
+---
+`$ ansible-playbook site.yml`
+---
+`$ ansible-playbook site.yml --limit controller`
 ---
 # Demo

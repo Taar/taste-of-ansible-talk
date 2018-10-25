@@ -1,5 +1,5 @@
 ---
-- hosts: control
+- hosts: controller
   gather_facts: false
   tasks:
     - name: verify slides are working
@@ -13,4 +13,3 @@
         msg: 'sldies failed to return content'
       when: "'mdx-deck' not in item.content"
       with_items: "{{ slide_index.results }}"
-

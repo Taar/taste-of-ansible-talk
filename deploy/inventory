@@ -1,13 +1,9 @@
 [controller]
-control ansible_connection=local
+localhost ansible_connection=local
 
 [slides]
 slides01
 slides02
 
-[ubuntu:children]
-slides
-controller
-
-[ubuntu:vars]
+[slides:vars]
 ansible_python_interpreter=/usr/bin/python3

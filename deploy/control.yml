@@ -27,10 +27,12 @@
       file:
         path: ../dist
         state: directory
+      tags: ['setup']
 
     - name: check for previous build
       shell: ls -1 ../dist
       register: build_files
+      tags: ['setup']
 
     - name:
       file:
@@ -38,6 +40,7 @@
         state: absent
       with_items: "{{ build_files.stdout_lines }}"
       when: build_files.stdout_lines
+      tags: ['setup']
 
     - name: install node packages
       yarn:
