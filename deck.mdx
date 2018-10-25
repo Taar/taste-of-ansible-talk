@@ -66,7 +66,7 @@ First part of this file is assigning host names of servers to a group name. At t
 ---
 <CodeSurfer
   code={require('raw-loader!./deploy/slides.yml')}
-  title="Ansible Playbook"
+  title="Slides Playbook"
   showNumbers
   notes="slides.yml"
   steps={[
@@ -108,10 +108,21 @@ Since ansible can run tasks on any host you provide it in the inventory file, th
 ---
 <CodeSurfer
   code={require('raw-loader!./deploy/control.yml')}
-  title="Ansible Playbook"
+  title="Control Playbook"
   showNumbers
   notes="control.yml"
+  steps={[
+    { range: [25, 60], notes: 'Build Slides' },
+    { range: [26, 29], notes: 'Create dist folder' },
+    { range: [31, 33], notes: 'Check for pervious build' },
+    { range: [35, 40], notes: 'Remove previous build files' },
+    { range: [42, 46], notes: 'Install node packages' },
+    { range: [48, 50], notes: 'Build Slides' },
+    { range: [52, 60], notes: 'Sanity Check' },
+  ]}
 />
 <Notes>
-Now I can make sure the control machine has all the tools I need to debug issues or to make sure everything is running correctly.
+On the control machine I build the slides so I can later copy them to the slides servers
 </Notes>
+---
+# Demo

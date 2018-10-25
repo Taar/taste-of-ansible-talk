@@ -34,7 +34,7 @@ The playbooks are in the `deploy` folder, you'll need to inside that folder to r
 If you have ansible installed, you can perform a quick check to make sure you can communicate from the control server to the slide servers:
 
     # Make sure you're in the deploy folder
-    $ ansible sldies -m ping
+    $ ansible slides -m ping
 
 Should output something like the following:
 

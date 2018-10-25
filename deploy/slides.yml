@@ -3,16 +3,6 @@
   become: True
   gather_facts: false
   pre_tasks:
-    - name: build files exist
-      file:
-        path: '../dist/{{item}}'
-        state: file
-      with_items: [
-        'index.html',
-        'main.js'
-      ]
-      tags: ['check']
-
     - name: create project dir
       file:
         path: /www/slides/

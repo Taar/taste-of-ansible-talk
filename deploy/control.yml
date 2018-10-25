@@ -23,6 +23,22 @@
     }
 
   tasks:
+    - name: Make sure dist folder exists
+      file:
+        path: ../dist
+        state: directory
+
+    - name: check for previous build
+      shell: ls -1 ../dist
+      register: build_files
+
+    - name:
+      file:
+        path: ../dist/{{item}}
+        state: absent
+      with_items: "{{ build_files.stdout_lines }}"
+      when: build_files.stdout_lines
+
     - name: install node packages
       yarn:
         path: ../
@@ -32,3 +48,13 @@
     - name: build slides
       command: yarn build
       tags: ['build']
+
+    - name: build files exist
+      file:
+        path: '../dist/{{item}}'
+        state: file
+      with_items: [
+        'index.html',
+        'main.js'
+      ]
+      tags: ['check']
