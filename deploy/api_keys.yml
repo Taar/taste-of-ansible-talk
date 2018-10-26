@@ -1,0 +1,14 @@
+---
+- hosts: controller
+  become: True
+  gather_facts: false
+  vars_files:
+    - vaulted_vars/api/vars
+    - vaulted_vars/api/vault
+  roles:
+    - {
+      name: weareinteractive.environment,
+      environment_config: {
+        DO_API_KEY: '{{ vault_api_keys["do_api_key"] }}'
+      }
+    }

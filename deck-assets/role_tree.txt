@@ -1,0 +1,9 @@
+roles/nginx
+├── defaults
+│   └── main.yml
+├── handlers
+│   └── main.yml
+├── tasks
+│   └── main.yml
+└── templates
+    └── nginx.conf.j2

@@ -25,7 +25,7 @@ Tools like ansible are great but, remember they are tools to automate provisioni
 
 github.com/Taar/taste-of-ansible-talk
 ```notes
-Warning! I only have intructions for Unix systems.
+Warning! I only have instructions for Unix systems.
 
 Inclues slides and all examples used in the slides. Also everything you need to try running the example yourself.
 ```
@@ -71,13 +71,9 @@ First part of this file is assigning host names of servers to a group name. At t
   steps={[
     { lines: [2], notes: 'Hosts' },
     { lines: [3, 4], notes: 'Super User and Fact gathering' },
-    { range: [5, 16], notes: 'Tasks' },
-    { lines: [5], notes: 'pre_tasks' },
-    { lines: [6], notes: 'Task Name' },
-    { range: [7, 9], notes: 'File Module' },
-    { lines: [10], notes: 'Tags' },
-    { range: [18, 27], notes: 'Roles' },
-    { range: [21, 26], notes: 'Vars' },
+    { range: [5, 15], notes: 'Roles' },
+    { lines: [7], notes: 'Role Name' },
+    { range: [8, 15], notes: 'Vars' },
   ]}
 />
 <Notes>
@@ -85,6 +81,38 @@ Ansible playbooks are where you define what tasks you would like to perform on a
 </Notes>
 ---
 `$ ansible-playbook slides.yml`
+---
+# Roles
+`roles` folder
+```notes
+Roles are placed in the roles folder
+```
+---
+<CodeSurfer
+  code={require('raw-loader!./deck-assets/role_tree.txt')}
+  title="Nginx role folder structure"
+/>
+<Notes>
+
+</Notes>
+---
+<CodeSurfer
+  code={require('raw-loader!./deploy/roles/nginx/tasks/main.yml')}
+  title="Nginx Role"
+  showNumbers
+  notes="roles/nginx/tasks/main.yml"
+  steps={[
+    { range: [1, 60], notes: 'Tasks' },
+    { range: [2, 13], notes: 'Create Folders' },
+    { range: [16, 20], notes: 'Install Nginx' },
+    { range: [22, 29], notes: 'Configure Nginx' },
+    { range: [31, 53], notes: 'Activate Sites' },
+    { range: [55, 60], notes: 'Make sure nginx is running' },
+  ]}
+/>
+<Notes>
+Examples of tasks. Not going into detail about how each one works.
+</Notes>
 ---
 # Control Server
 
@@ -115,7 +143,7 @@ Since ansible can run tasks on any host you provide it in the inventory file, th
     { range: [25, 60], notes: 'Build Slides' },
     { range: [26, 30], notes: 'Create dist folder' },
     { range: [32, 35], notes: 'Check for pervious build' },
-    { range: [37, 42], notes: 'Remove previous build files' },
+    { range: [37, 43], notes: 'Remove previous build files' },
     { lines: [39, 41], notes: 'with_items' },
     { lines: [39, 41, 34], notes: 'with_items' },
     { lines: [42], notes: 'when' },
@@ -143,12 +171,13 @@ We don't. So we'll need to create a playbook to check to see if everything is wo
   notes="stack_status.yml"
   steps={[
     { lines: [2], notes: 'On controller' },
-    { range: [5, 10], notes: 'Curl slides' },
-    { lines: [7, 8], notes: 'Endpoint returns content' },
-    { lines: [9, 7], notes: 'Test each Host in the slides group' },
-    { lines: [10], notes: 'register' },
-    { range: [12, 15], notes: 'Test content' },
-    { lines: [14, 15], notes: 'Cannot find title in the content' },
+    { range: [4, 8], notes: 'Hosts' },
+    { range: [10, 15], notes: 'Curl slides' },
+    { lines: [12, 13], notes: 'Endpoint returns content' },
+    { lines: [14, 12], notes: 'Test each Host in the slides group' },
+    { lines: [15], notes: 'register' },
+    { range: [17, 20], notes: 'Test content' },
+    { lines: [19, 20], notes: 'Cannot find title in the content' },
   ]}
 />
 <Notes>
@@ -166,7 +195,7 @@ stack_status.yml lets us test to see if our playbooks run correctly
   notes="site.yml"
   steps={[
     { range: [1, 14], notes: 'site.yml' },
-    { range: [5, 10], notes: 'Update Apt Cache' },
+    { range: [6, 11], notes: 'Update Apt Cache' },
     { range: [12, 14], notes: 'import playbooks' },
   ]}
 />

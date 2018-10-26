@@ -1,15 +1,20 @@
 ---
 - hosts: controller
   gather_facts: false
+  vars_prompt:
+    - name: check_hosts
+      prompt: 'which hosts would you like to check?'
+      default: '{{ groups["slides"] }}'
+      private: false
   tasks:
     - name: verify slides are working
       uri:
         url: http://{{ item }}
         return_content: true
-      with_items: "{{ groups['slides'] }}"
+      with_items: '{{ check_hosts }}'
       register: slide_index
 
     - fail:
         msg: 'sldies failed to return content'
-      when: "'mdx-deck' not in item.content"
-      with_items: "{{ slide_index.results }}"
+      when: '"mdx-deck" not in item.content'
+      with_items: '{{ slide_index.results }}'

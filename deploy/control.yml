@@ -2,7 +2,6 @@
 - hosts: controller
   become: True
   gather_facts: false
-
   roles:
     - {
       name: sources,
@@ -19,6 +18,7 @@
         'curl',
         'nodejs',
         'yarn',
+        'python-requests',
       ],
     }
 

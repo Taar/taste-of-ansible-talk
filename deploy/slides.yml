@@ -2,26 +2,14 @@
 - hosts: slides
   become: True
   gather_facts: false
-  pre_tasks:
-    - name: create project dir
-      file:
-        path: /www/slides/
-        state: directory
-      tags: ['build']
-
-    - name: copy build files
-      copy:
-        src: ../dist/
-        dest: /www/slides/
-      tags: ['build']
-
   roles:
     - {
       name: nginx,
       sites: {
         slides: {
           port: 80,
-          root: '/www/slides'
+          root: '/www/slides',
+          build_files: '../dist/'
         }
       }
     }

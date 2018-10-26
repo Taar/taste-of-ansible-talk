@@ -62,3 +62,32 @@ Otherwise you can run them independently:
     $ ansible-playbook slides.yml
 
 > Warning: `slides.yml` will fail if you attempt to run it before `control.yml`
+
+# Digital Ocean
+
+> Make sure you're inside the `deploy` folder
+
+Install roles:
+
+    $ ansible-galaxy install -r requirements.yml
+
+Create vault file:
+
+    $ ansible-vault create vaulted_vars/api/vault
+
+Insert the following:
+
+    vault_api_keys:
+        do_api_key: <api_key_here>
+
+Running `api_keys.yml` to set global environment vars
+
+> Warning: you'll need to logout
+
+    $ ansible-playbook api_keys.yml --ask-vault-pass
+
+To make sure the api key is set correctly, run the following:
+
+    $ python digital_ocean.py --list
+
+You should get json output of all your currently running droplets
