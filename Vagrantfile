@@ -32,6 +32,8 @@ Vagrant.configure(2) do |config|
     h.vm.provision :shell, :inline => <<'EOF'
 cp /vagrant/ansible.pub /home/vagrant/.ssh/id_rsa.pub
 cp /vagrant/ansible /home/vagrant/.ssh/id_rsa
+cp /vagrant/ansible.pub /home/vagrant/.ssh/ansible.pub
+cp /vagrant/ansible /home/vagrant/.ssh/ansible
 cp /vagrant/ssh_config /home/vagrant/.ssh/config
 chown -R vagrant:vagrant /home/vagrant/.ssh/
 EOF
