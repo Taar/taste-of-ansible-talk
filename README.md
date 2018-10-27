@@ -65,24 +65,41 @@ Otherwise you can run them independently:
 
 # Digital Ocean
 
-> Make sure you're inside the `deploy` folder
+> WARNING! You will get charged for your usage! I'm not responsible for any changes occurred by running these playbooks! Please familiarize yourself with digital ocean's pricing models. These playbooks will create a single 1 vcpu with 1 GB Memory droplet. 
 
-Install roles:
+Make sure you have an digital ocean api key with read and write permissions and that you've at least ran the `control.yml` playbook as it installs a few dependencies we'll need.
+
+You'll also need to add an ssh key to your account. Ansible will use the default ssh key `~/.ssh/id_rsa`, you can tell ansible to use a different key if you'd like. Do do that change the key being used in the `digital_ocean.ini`.
+
+> Those dependencies are `dopy` and `requests` python packages.
+
+> Make sure you're inside the `deploy` folder.
+
+## Setup
+
+Install required role from Ansible Galaxy:
 
     $ ansible-galaxy install -r requirements.yml
 
-Create vault file:
+Next we'll need to create a vault to store our ditigal ocean api key. Running the command below will prompt you to create a password for the vault. After which your editor should open:
+
+> `ansible-vault` will use the editor set to `$EDITOR` which will be either `nano` or `vim`.
+> To see what editor will be used, echo the `$EDITOR` variable, `echo $EDITOR`
 
     $ ansible-vault create vaulted_vars/api/vault
 
-Insert the following:
+Insert the following into your vault file:
 
     vault_api_keys:
         do_api_key: <api_key_here>
 
-Running `api_keys.yml` to set global environment vars
+If you need to change the api key or make any changes to the vault, you can run the following:
 
-> Warning: you'll need to logout
+    $ ansible-vault edit vaulted_vars/api/vault
+
+To use the digital ocean module and dynamic inventory, we'll need to set our api key to `DO_API_KEY`. You can run the `api_key.yml` playbook to do this, or you can set it another way if you desire:
+
+> This will place it in the `/etc/environment` file. You'll most likely need to logout to see the changes.
 
     $ ansible-playbook api_keys.yml --ask-vault-pass
 
@@ -90,4 +107,40 @@ To make sure the api key is set correctly, run the following:
 
     $ python digital_ocean.py --list
 
-You should get json output of all your currently running droplets
+You should get JSON output with any running droplets.
+
+## Creating a droplet
+
+Before you can run the playbook to create a droplet, you'll need the finger print for the public ssh key you'd like placed on the droplet. To get this finger print you'll need to login to your digital ocean account and go to account security. There you'll find a list of your public keys and their finger prints. Copy and paste the finger print when prompted to do so.
+
+Assuming you're api key is set to `DO_API_KEY` and you have a public ssh key finger print handy, you can run the following to create a droplet:
+
+> See the playbook file for more information! It should create a droplet called `slidesdo01`. It will only create the droplet if it doesn't already exist.
+
+    $ ansible-playbook create_droplet.yml
+
+We can use the same `nginx` role we used for the `slides` servers to provision the droplet we've just created.
+
+Since the droplet we created has the name `slidesdo01`, it's ip address will be randomly assigned and we won't know what it is ahead of time. To find out what its ip address is, we can use the digital ocean dynamic inventory file to get the ip address. The dynamic inventory file will create a group named after the droplet. To see what information would be generated you run the following command:
+
+    $ python digital_ocean.py --list
+
+You'll see a group called `slidesdo01` and the droplets ip address. 
+
+Lets provision the droplet:
+
+    $ ansible-playbook -i digital_ocean.py slide_do.py
+
+Once complete, copy and paste the droplet's ip address into your browser's address bar and the slides should appear!
+
+Another way to make sure its all working is to run the `stack_status.yml` playbook:
+
+> When prompted, provide the droplets group, `slidesdo01`
+
+    $ ansible-playbook -i digital_ocean.py stack_status.yml
+
+## Deleting the Droplet
+
+To destroy the droplet you can run the following:
+
+    $ ansible-playbook destroy_droplet.yml

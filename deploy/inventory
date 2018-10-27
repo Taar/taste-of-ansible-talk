@@ -4,6 +4,7 @@ localhost ansible_connection=local
 [slides]
 slides01
 slides02
+slides03
 
 [slides:vars]
 ansible_python_interpreter=/usr/bin/python3

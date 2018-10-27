@@ -140,17 +140,17 @@ Since ansible can run tasks on any host you provide it in the inventory file, th
   showNumbers
   notes="control.yml"
   steps={[
-    { range: [25, 60], notes: 'Build Slides' },
-    { range: [26, 30], notes: 'Create dist folder' },
-    { range: [32, 35], notes: 'Check for pervious build' },
-    { range: [37, 43], notes: 'Remove previous build files' },
-    { lines: [39, 41], notes: 'with_items' },
-    { lines: [39, 41, 34], notes: 'with_items' },
-    { lines: [42], notes: 'when' },
-    { range: [45, 49], notes: 'Install node packages' },
-    { range: [51, 53], notes: 'Build Slides' },
-    { range: [55, 63], notes: 'Sanity Check' },
-    { ranges: [[57, 57], [59, 62]], notes: 'Sanity Check' },
+    { range: [34, 71], notes: 'Build Slides' },
+    { range: [34, 38], notes: 'Create dist folder' },
+    { range: [40, 43], notes: 'Check for pervious build' },
+    { range: [45, 51], notes: 'Remove previous build files' },
+    { lines: [47, 49], notes: 'with_items' },
+    { lines: [47, 49, 42], notes: 'with_items' },
+    { lines: [50], notes: 'when' },
+    { range: [53, 57], notes: 'Install node packages' },
+    { range: [59, 61], notes: 'Build Slides' },
+    { range: [63, 71], notes: 'Sanity Check' },
+    { ranges: [[65, 65], [67, 70]], notes: 'Sanity Check' },
   ]}
 />
 <Notes>

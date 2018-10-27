@@ -1,0 +1,15 @@
+---
+- hosts: slidesdo01
+  become: True
+  gather_facts: false
+  roles:
+    - {
+      name: nginx,
+      sites: {
+        slides: {
+          port: 80,
+          root: '/www/slides',
+          build_files: '../dist/'
+        }
+      }
+    }

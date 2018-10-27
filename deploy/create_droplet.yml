@@ -1,0 +1,22 @@
+---
+- hosts: controller
+  become: false
+  gather_facts: false
+  vars_prompt:
+    - name: ssh_key_fingerprint
+      prompt: 'SSH key finger print'
+      private: false
+  tasks:
+    - name: create droplet
+      digital_ocean:
+        name: slidesdo01
+        # if you don't set unique_name to true, it'll create a new droplet
+        # everytime you run this playbook. This is not what we want.
+        unique_name: true
+        command: droplet
+        image_id: ubuntu-18-04-x64
+        region_id: tor1
+        size_id: s-1vcpu-1gb
+        ssh_key_ids: ['{{ ssh_key_fingerprint }}']
+        state: present
+        wait_timeout: 1009

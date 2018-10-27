@@ -1,0 +1,24 @@
+---
+- hosts: controller
+  become: false
+  gather_facts: false
+  vars_prompt:
+    - name: destroy_droplet
+      prompt: 'Are you sure you want to destroy your droplet? [y or n]'
+      private: false
+  tasks:
+    # A fail dafe just in case you run the wrong play book
+    - fail:
+        msg: You choose not to destroy the droplet
+      when: 'destroy_droplet != "y"'
+
+    - name: destroy droplet
+      digital_ocean:
+        name: slidesdo01
+        unique_name: true
+        image_id: ubuntu-18-04-x64
+        region_id: tor1
+        size_id: s-1vcpu-1gb
+        command: droplet
+        state: deleted
+        wait_timeout: 1000

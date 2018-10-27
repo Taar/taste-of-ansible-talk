@@ -18,11 +18,19 @@
         'curl',
         'nodejs',
         'yarn',
-        'python-requests',
+        'python-pip',
       ],
     }
 
   tasks:
+    - name: install pip packages
+      pip:
+        name: [
+          'dopy',
+          'requests'
+        ]
+        state: present
+
     - name: Make sure dist folder exists
       file:
         path: ../dist
@@ -34,11 +42,11 @@
       register: build_files
       tags: ['setup']
 
-    - name:
+    - name: delete previous build
       file:
         path: ../dist/{{item}}
         state: absent
-      with_items: "{{ build_files.stdout_lines }}"
+      with_items: '{{ build_files.stdout_lines }}'
       when: build_files.stdout_lines
       tags: ['setup']
 
